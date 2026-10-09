@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Kalkulator nadpłat kredytu</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,400..700&display=swap" />
+    <style>
+      :root { --bg: #f8f9ff; --fg: #191c20; }
+      @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg: #111418; --fg: #e1e2e8; color-scheme: dark; } }
+      :root[data-theme="dark"] { --bg: #111418; --fg: #e1e2e8; color-scheme: dark; }
+      html, body, #root { min-height: 100%; }
+      body { margin: 0; background: var(--bg); color: var(--fg); }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
