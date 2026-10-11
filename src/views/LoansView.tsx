@@ -17,10 +17,12 @@ interface Props {
   onOpenForecast: (loanId: string) => void;
 }
 
+/** Liczba rat zapłaconych przed bieżącym miesiącem (ratę z bieżącego miesiąca traktujemy jako jeszcze niezapłaconą). */
 function monthsElapsed(startMonth: string): number {
   const [y, m] = startMonth.split('-').map(Number);
   const now = new Date();
-  return Math.max(0, (now.getFullYear() - y) * 12 + (now.getMonth() + 1 - m) + 1);
+  const n = (now.getFullYear() - y) * 12 + (now.getMonth() + 1 - m);
+  return Number.isFinite(n) ? Math.max(0, n) : 0;
 }
 
 export function LoansView({ state, dispatch, onOpenForecast }: Props) {
@@ -67,7 +69,7 @@ export function LoansView({ state, dispatch, onOpenForecast }: Props) {
         <Box sx={{ display: 'grid', gap: 1.5, gridTemplateColumns: { xs: '1fr', sm: 'repeat(3, 1fr)' } }}>
           {[...totals.entries()].map(([cur, t]) => (
             <Box key={cur} sx={{ display: 'contents' }}>
-              <Summary label={`Saldo zadłużenia dziś${totals.size > 1 ? ` (${cur})` : ''}`} value={money(t.debt, cur)} />
+              <Summary label={`Pozostało do spłaty${totals.size > 1 ? ` (${cur})` : ''}`} value={money(t.debt, cur)} />
               <Summary label="Miesięcznie z nadpłatami" value={money(t.monthly, cur)} />
               <Summary label="Odsetki w całym okresie" value={money(t.interest, cur)} />
             </Box>

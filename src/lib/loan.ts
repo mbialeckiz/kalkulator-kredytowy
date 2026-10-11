@@ -80,7 +80,7 @@ export function simulate(
   let month = 0;
   let lastScheduled = 0;
 
-  while (balance > EPS && month < MAX_MONTHS) {
+  while (balance > 0 && month < MAX_MONTHS) {
     const remaining = Math.max(1, N - month);
     const recalc = strategy !== 'shorten' && month > 0 && overpay > 0;
     if (recalc) {
@@ -91,16 +91,17 @@ export function simulate(
     const interest = balance * r;
     const payment = loan.paymentType === 'equal' ? installment : capitalPart + interest;
     lastScheduled = payment;
-    const principal = Math.min(Math.max(payment - interest, 0), balance);
+    let principal = Math.min(Math.max(payment - interest, 0), balance);
+    // Końcówka poniżej pół grosza trafia do ostatniej raty, żeby kapitał sumował się dokładnie.
+    if (balance - principal < EPS) principal = balance;
     balance -= principal;
 
     let extra = 0;
-    if (overpay > 0 && balance > EPS) {
+    if (overpay > 0 && balance > 0) {
       extra = strategy === 'pyramid' ? Math.max(0, fixedTotal - payment) : overpay;
-      extra = Math.min(extra, balance);
+      if (extra >= balance - EPS) extra = balance;
       balance -= extra;
     }
-    if (balance < EPS) balance = 0;
 
     month++;
     totalInterest += interest;
